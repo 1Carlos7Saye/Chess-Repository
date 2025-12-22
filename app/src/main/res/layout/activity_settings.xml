@@ -1,0 +1,45 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@color/chess_background">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Settings"
+        android:textSize="30sp"
+        android:textColor="@color/square_dark"
+        android:layout_gravity="center"
+        android:layout_marginBottom="30dp" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/swOrientation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Horizontal (Landscape) Mode"
+        android:padding="15dp" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/swSound"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Enable Move Sounds"
+        android:padding="15dp" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/swHelper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Beginner Helper (Show Moves)"
+        android:padding="15dp" />
+
+    <Button
+        android:id="@+id/btnBackToMenu"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="Back to Menu"
+        android:backgroundTint="@color/chess_primary"
+        android:layout_marginTop="40dp" />
+</LinearLayout>

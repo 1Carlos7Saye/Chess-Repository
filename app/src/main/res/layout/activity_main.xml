@@ -1,0 +1,38 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@color/chess_background"
+    android:padding="24dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome to your\nLocal Multiplayer Chess App"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:textColor="@color/square_dark"
+        android:textAlignment="center"
+        android:layout_marginBottom="60dp" />
+
+    <Button
+        android:id="@+id/btnPlay"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:text="Play vs a Friend"
+        android:backgroundTint="@color/chess_primary"
+        android:textColor="@android:color/white"
+        android:layout_marginBottom="16dp"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/btnSettings"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:text="Settings"
+        android:backgroundTint="@color/chess_primary"
+        android:textColor="@android:color/white"
+        android:textSize="18sp" />
+
+</LinearLayout>

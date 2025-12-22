@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="chess_primary">#A0522D</color> <color name="chess_background">#F5F5DC</color> <color name="square_light">#F5F5DC</color> <color name="square_dark">#8B4513</color>  <color name="piece_white_ivory">#F5F5F0</color>
+    <color name="piece_black_charcoal">#333333</color>
+    <color name="piece_shadow">#1A000000</color> </resources>
