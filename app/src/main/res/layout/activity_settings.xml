@@ -35,6 +35,45 @@
         android:text="Beginner Helper (Show Moves)"
         android:padding="15dp" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose Board Theme"
+        android:textColor="@color/square_dark"
+        android:textSize="18sp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp" />
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="2">
+
+        <Button
+            android:id="@+id/themeBrown"
+            android:layout_columnWeight="1"
+            android:text="Classic Brown"
+            android:layout_margin="4dp" />
+
+        <Button
+            android:id="@+id/themeGreen"
+            android:layout_columnWeight="1"
+            android:text="Forest Green"
+            android:layout_margin="4dp" />
+
+        <Button
+            android:id="@+id/themeBlue"
+            android:layout_columnWeight="1"
+            android:text="Ocean Blue"
+            android:layout_margin="4dp" />
+
+        <Button
+            android:id="@+id/themePink"
+            android:layout_columnWeight="1"
+            android:text="Soft Pink"
+            android:layout_margin="4dp" />
+    </GridLayout>
+
     <Button
         android:id="@+id/btnBackToMenu"
         android:layout_width="match_parent"

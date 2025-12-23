@@ -1,5 +1,9 @@
 package com.marwadi.finalprojectchess;
 
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.widget.TextView;
+import android.widget.ScrollView;
 import android.widget.Toast;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -14,7 +18,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class GameActivity extends AppCompatActivity {
 
-
+    private TextView tvMoveLog;
+    private ScrollView moveHistoryScroll;
+    private int moveCount = 1;
     private int enPassantTargetRow = -1;
     private int enPassantTargetCol = -1;
     private int halfMoveClock = 0;
@@ -40,8 +46,12 @@ public class GameActivity extends AppCompatActivity {
 
         btnBack.setOnClickListener(v -> showBackDialog());
 
+
         setupInitialPieces();
         renderBoard();
+
+        tvMoveLog = findViewById(R.id.tvMoveLog);
+        moveHistoryScroll = findViewById(R.id.moveHistoryScroll);
     }
 
     private void showBackDialog() {
@@ -188,8 +198,38 @@ public class GameActivity extends AppCompatActivity {
                 } else if (row == selectedRow && col == selectedCol) {
                     square.setBackgroundColor(Color.parseColor("#BCED91"));
                 } else {
-                    int color = ((row + col) % 2 == 0) ? R.color.square_light : R.color.square_dark;
-                    square.setBackgroundColor(getResources().getColor(color));
+                    // 1. Fetch the saved theme from Settings
+                    SharedPreferences prefs = getSharedPreferences("ChessPrefs", MODE_PRIVATE);
+                    String theme = prefs.getString("board_theme", "brown"); // Default to brown
+
+// 2. Define colors for the chosen theme
+                    int lightColor = Color.parseColor("#FFFFFF"); // Light squares are usually white/cream
+                    int darkColor;
+
+                    switch (theme) {
+                        case "green":
+                            darkColor = Color.parseColor("#769656"); // Chess.com Green
+                            break;
+                        case "blue":
+                            darkColor = Color.parseColor("#4B7399"); // Professional Blue
+                            break;
+                        case "pink":
+                            darkColor = Color.parseColor("#E6A8D7"); // Soft Pink
+                            break;
+                        default: // "brown"
+                            darkColor = Color.parseColor("#B58863"); // Classic Wood Brown
+                            break;
+                    }
+
+// 3. Apply the colors based on the theme
+                    if (isKingInCheckSquare) {
+                        square.setBackgroundColor(Color.parseColor("#FFCDD2")); // Red highlight for check
+                    } else if (row == selectedRow && col == selectedCol) {
+                        square.setBackgroundColor(Color.parseColor("#BCED91")); // Selection highlight
+                    } else {
+                        // This uses the theme colors you just picked
+                        square.setBackgroundColor(((row + col) % 2 == 0) ? lightColor : darkColor);
+                    }
                 }
 
                 // 3. NEW: Add Legal Move Hints (Translucent Dots)
@@ -254,6 +294,24 @@ public class GameActivity extends AppCompatActivity {
         pieceImg.setLayoutParams(pParams);
         square.addView(pieceImg);
     }
+    private String getMoveNotation(int fR, int fC, int tR, int tC, Piece actor, boolean isCapture) {
+        String[] columns = {"a", "b", "c", "d", "e", "f", "g", "h"};
+        String targetSq = columns[tC] + (8 - tR); // e.g., "e4"
+
+        String piecePrefix = "";
+        if (actor.type == Piece.Type.KNIGHT) piecePrefix = "N";
+        else if (actor.type == Piece.Type.BISHOP) piecePrefix = "B";
+        else if (actor.type == Piece.Type.ROOK) piecePrefix = "R";
+        else if (actor.type == Piece.Type.QUEEN) piecePrefix = "Q";
+        else if (actor.type == Piece.Type.KING) piecePrefix = "K";
+
+        // Pawn captures show the starting column (e.g., "exd5")
+        if (actor.type == Piece.Type.PAWN && isCapture) {
+            return columns[fC] + "x" + targetSq;
+        }
+
+        return piecePrefix + (isCapture ? "x" : "") + targetSq;
+    }
 
     // Phase 2: Handle Click Logic
     private void handleSquareClick(int row, int col) {
@@ -316,9 +374,29 @@ public class GameActivity extends AppCompatActivity {
                     boardState[row][col] = movingPiece;
                     boardState[selectedRow][selectedCol] = null;
 
+                    // --- ONLY KEEP THIS LOGGING BLOCK HERE ---
+                    boolean isCapture = (targetPiece != null) ||
+                            (movingPiece.type == Piece.Type.PAWN && row == enPassantTargetRow && col == enPassantTargetCol);
+
+                    String finalNotation = getMoveNotation(selectedRow, selectedCol, row, col, movingPiece, isCapture);
+
+                    if (isWhiteTurn) {
+                        // White just moved, so add "1. e4 "
+                        tvMoveLog.append(moveCount + ". " + finalNotation + " ");
+                    } else {
+                        // Black just moved, so add "e5  " and increment
+                        tvMoveLog.append(finalNotation + "  ");
+                        moveCount++;
+                    }
+
+// Ensure the ScrollView follows the text
+                    moveHistoryScroll.post(() -> moveHistoryScroll.fullScroll(View.FOCUS_DOWN));
+
                     checkPawnPromotion(row, col);
                     isWhiteTurn = !isWhiteTurn;
                     rotateBoard();
+
+                    // Inside handleSquareClick, after the move is finalized:
 
                     // --- NEW: SOUND LOGIC FOR CHECK AND CHECKMATE ---
                     boolean canMove = hasLegalMoves(isWhiteTurn);

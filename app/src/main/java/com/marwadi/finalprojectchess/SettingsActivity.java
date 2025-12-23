@@ -24,6 +24,11 @@ public class SettingsActivity extends AppCompatActivity {
         SwitchCompat swHelper = findViewById(R.id.swHelper);
         Button btnBack = findViewById(R.id.btnBackToMenu);
 
+        findViewById(R.id.themeBrown).setOnClickListener(v -> saveTheme("brown"));
+        findViewById(R.id.themeGreen).setOnClickListener(v -> saveTheme("green"));
+        findViewById(R.id.themeBlue).setOnClickListener(v -> saveTheme("blue"));
+        findViewById(R.id.themePink).setOnClickListener(v -> saveTheme("pink"));
+
         // Load saved choices
         swOrientation.setChecked(prefs.getBoolean("horizontal", false));
         swSound.setChecked(prefs.getBoolean("sound", true));
@@ -40,5 +45,9 @@ public class SettingsActivity extends AppCompatActivity {
         swHelper.setOnCheckedChangeListener((v, isChecked) -> prefs.edit().putBoolean("helper", isChecked).apply());
 
         btnBack.setOnClickListener(v -> finish());
+    }
+    private void saveTheme(String themeName) {
+        prefs.edit().putString("board_theme", themeName).apply();
+        android.widget.Toast.makeText(this, "Theme set to: " + themeName, android.widget.Toast.LENGTH_SHORT).show();
     }
 }
