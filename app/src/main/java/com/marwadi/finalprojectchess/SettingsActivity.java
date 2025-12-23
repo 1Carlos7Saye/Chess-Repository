@@ -19,7 +19,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         prefs = getSharedPreferences("ChessPrefs", MODE_PRIVATE);
 
-        SwitchCompat swOrientation = findViewById(R.id.swOrientation);
+        SwitchCompat swRotate = findViewById(R.id.swRotate);
         SwitchCompat swSound = findViewById(R.id.swSound);
         SwitchCompat swHelper = findViewById(R.id.swHelper);
         Button btnBack = findViewById(R.id.btnBackToMenu);
@@ -30,15 +30,13 @@ public class SettingsActivity extends AppCompatActivity {
         findViewById(R.id.themePink).setOnClickListener(v -> saveTheme("pink"));
 
         // Load saved choices
-        swOrientation.setChecked(prefs.getBoolean("horizontal", false));
+        swRotate.setChecked(prefs.getBoolean("rotate_enabled", true));
         swSound.setChecked(prefs.getBoolean("sound", true));
         swHelper.setChecked(prefs.getBoolean("helper", true));
 
         // Save choices and apply orientation
-        swOrientation.setOnCheckedChangeListener((v, isChecked) -> {
-            prefs.edit().putBoolean("horizontal", isChecked).apply();
-            if (isChecked) setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-            else setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        swRotate.setOnCheckedChangeListener((v, isChecked) -> {
+            prefs.edit().putBoolean("rotate_enabled", isChecked).apply();
         });
 
         swSound.setOnCheckedChangeListener((v, isChecked) -> prefs.edit().putBoolean("sound", isChecked).apply());

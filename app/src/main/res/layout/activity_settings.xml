@@ -15,10 +15,10 @@
         android:layout_marginBottom="30dp" />
 
     <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/swOrientation"
+        android:id="@+id/swRotate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Horizontal (Landscape) Mode"
+        android:text="Rotate Board (1v1 Mode)"
         android:padding="15dp" />
 
     <androidx.appcompat.widget.SwitchCompat
