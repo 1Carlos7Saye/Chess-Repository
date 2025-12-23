@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class GameActivity extends AppCompatActivity {
 
+
     private int enPassantTargetRow = -1;
     private int enPassantTargetCol = -1;
     private int halfMoveClock = 0;
@@ -25,10 +26,14 @@ public class GameActivity extends AppCompatActivity {
     private int selectedRow = -1;
     private int selectedCol = -1;
 
+    private SoundManager soundManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+        soundManager = new SoundManager(this);
 
         chessBoardGrid = findViewById(R.id.chessBoardGrid);
         Button btnBack = findViewById(R.id.btnBackToMenu);
@@ -266,6 +271,14 @@ public class GameActivity extends AppCompatActivity {
                     Piece movingPiece = boardState[selectedRow][selectedCol];
                     Piece targetPiece = boardState[row][col];
 
+                    // --- NEW: SOUND LOGIC FOR MOVES AND CAPTURES ---
+                    // We check for targetPiece OR an active En Passant capture square
+                    if (targetPiece != null || (movingPiece.type == Piece.Type.PAWN && row == enPassantTargetRow && col == enPassantTargetCol)) {
+                        soundManager.playCapture();
+                    } else {
+                        soundManager.playMove();
+                    }
+
                     // 1. En Passant Capture Execution
                     if (movingPiece.type == Piece.Type.PAWN && row == enPassantTargetRow && col == enPassantTargetCol) {
                         int capturedPawnRow = isWhiteTurn ? row + 1 : row - 1;
@@ -307,13 +320,19 @@ public class GameActivity extends AppCompatActivity {
                     isWhiteTurn = !isWhiteTurn;
                     rotateBoard();
 
-                    // Game state checks
-                    if (!hasLegalMoves(isWhiteTurn)) {
-                        if (isInCheck(isWhiteTurn)) {
+                    // --- NEW: SOUND LOGIC FOR CHECK AND CHECKMATE ---
+                    boolean canMove = hasLegalMoves(isWhiteTurn);
+                    boolean inCheck = isInCheck(isWhiteTurn);
+
+                    if (!canMove) {
+                        if (inCheck) {
+                            soundManager.playCheckmate(); // Play checkmate sound
                             showGameOverDialog("Checkmate! " + (isWhiteTurn ? "Black" : "White") + " Wins!");
                         } else {
                             showGameOverDialog("Draw: Stalemate!");
                         }
+                    } else if (inCheck) {
+                        soundManager.playCheck(); // Play standard check alert
                     } else if (halfMoveClock >= 100) {
                         showGameOverDialog("Draw: 50-Move Rule!");
                     }
@@ -476,5 +495,13 @@ public class GameActivity extends AppCompatActivity {
                 chessBoardGrid.getChildAt(i).animate().rotation(angle).setDuration(600).start();
             }
         }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (soundManager != null) {
+            soundManager.release(); //
+        }
     }
+    }
+
 
