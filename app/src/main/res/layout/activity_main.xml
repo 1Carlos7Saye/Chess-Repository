@@ -17,6 +17,14 @@
         android:layout_marginBottom="60dp" />
 
     <Button
+        android:id="@+id/btnVsComputer"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="Play vs Computer"
+        android:backgroundTint="@color/chess_primary"
+        android:layout_marginTop="10dp" />
+
+    <Button
         android:id="@+id/btnPlay"
         android:layout_width="match_parent"
         android:layout_height="64dp"

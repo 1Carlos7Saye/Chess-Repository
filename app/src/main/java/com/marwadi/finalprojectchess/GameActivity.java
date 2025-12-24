@@ -1,5 +1,6 @@
 package com.marwadi.finalprojectchess;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ public class GameActivity extends AppCompatActivity {
     private GridLayout chessBoardGrid;
     private Piece[][] boardState = new Piece[8][8];
     private boolean isWhiteTurn = true;
+    private boolean isVsComputerMode = false;
 
     // Phase 2: Selection Variables
     private int selectedRow = -1;
@@ -39,20 +41,25 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        soundManager = new SoundManager(this);
+        tvMoveLog = findViewById(R.id.tvMoveLog);
+        moveHistoryScroll = findViewById(R.id.moveHistoryScroll);
 
+        // 1. Get the data sent from the menu
+        isVsComputerMode = getIntent().getBooleanExtra("isVsComputer", false);
+
+        soundManager = new SoundManager(this);
         chessBoardGrid = findViewById(R.id.chessBoardGrid);
         Button btnBack = findViewById(R.id.btnBackToMenu);
 
         btnBack.setOnClickListener(v -> showBackDialog());
 
-
+        // 2. Start the game logic
         setupInitialPieces();
         renderBoard();
-
-        tvMoveLog = findViewById(R.id.tvMoveLog);
-        moveHistoryScroll = findViewById(R.id.moveHistoryScroll);
     }
+
+
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -77,7 +84,14 @@ public class GameActivity extends AppCompatActivity {
         Piece piece = boardState[row][col];
         if (piece != null && piece.type == Piece.Type.PAWN) {
             if ((piece.isWhite && row == 0) || (!piece.isWhite && row == 7)) {
-                showPromotionDialog(row, col, piece.isWhite);
+                // If it's the bot's pawn, auto-promote to Queen
+                if (isVsComputerMode && !piece.isWhite) {
+                    boardState[row][col] = new Piece(Piece.Type.QUEEN, false, R.drawable.queen);
+                    renderBoard();
+                } else {
+                    // Otherwise, show the selection dialog for the human
+                    showPromotionDialog(row, col, piece.isWhite);
+                }
             }
         }
     }
@@ -173,6 +187,93 @@ public class GameActivity extends AppCompatActivity {
                 })
                 .setNegativeButton("Main Menu", (dialog, which) -> finish())
                 .show();
+    }
+    private void executeMove(int row, int col) {
+        Piece movingPiece = boardState[selectedRow][selectedCol];
+        Piece targetPiece = boardState[row][col];
+
+        // 1. Move/Capture Sound
+        boolean soundEnabled = getSharedPreferences("ChessPrefs", MODE_PRIVATE).getBoolean("sound", true);
+        if (soundEnabled) {
+            if (targetPiece != null || (movingPiece.type == Piece.Type.PAWN && row == enPassantTargetRow && col == enPassantTargetCol)) {
+                soundManager.playCapture();
+            } else {
+                soundManager.playMove();
+            }
+        }
+
+        // 2. Specialized Rules (En Passant)
+        if (movingPiece.type == Piece.Type.PAWN && row == enPassantTargetRow && col == enPassantTargetCol) {
+            int capturedPawnRow = isWhiteTurn ? row + 1 : row - 1;
+            boardState[capturedPawnRow][col] = null;
+        }
+
+        // 3. Update Move History Logic
+        boolean isCapture = (targetPiece != null) || (movingPiece.type == Piece.Type.PAWN && row == enPassantTargetRow && col == enPassantTargetCol);
+        String finalNotation = getMoveNotation(selectedRow, selectedCol, row, col, movingPiece, isCapture);
+
+        if (isWhiteTurn) {
+            tvMoveLog.append(moveCount + ". " + finalNotation + " ");
+        } else {
+            tvMoveLog.append(finalNotation + "  ");
+            moveCount++;
+        }
+
+        // 4. THE FIX: Clear the EXACT square the piece started from
+        boardState[row][col] = movingPiece;
+        boardState[selectedRow][selectedCol] = null; // Use selectedRow, not boardState.length - 1
+        movingPiece.hasMoved = true;
+
+        // 5. Finalize Turn
+        isWhiteTurn = !isWhiteTurn;
+        selectedRow = -1;
+        selectedCol = -1;
+
+        checkPawnPromotion(row, col);
+        renderBoard();
+        rotateBoard();
+
+        // 6. Check for End Game or Bot Trigger
+        if (!hasLegalMoves(isWhiteTurn)) {
+            showGameOverDialog(isInCheck(isWhiteTurn) ? "Checkmate!" : "Stalemate!");
+        } else if (isVsComputerMode && !isWhiteTurn) {
+            makeComputerMove();
+        }
+    }
+    private void makeComputerMove() {
+        java.util.List<int[]> legalMoves = new java.util.ArrayList<>();
+
+        // Find all legal moves for Black
+        for (int r = 0; r < 8; r++) {
+            for (int c = 0; c < 8; c++) {
+                Piece p = boardState[r][c];
+                if (p != null && !p.isWhite) {
+                    for (int tR = 0; tR < 8; tR++) {
+                        for (int tC = 0; tC < 8; tC++) {
+                            if (isValidMove(r, c, tR, tC) && isMoveSafe(r, c, tR, tC, false)) {
+                                legalMoves.add(new int[]{r, c, tR, tC});
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!legalMoves.isEmpty()) {
+            int[] move = legalMoves.get(new java.util.Random().nextInt(legalMoves.size()));
+            final int fR = move[0];
+            final int fC = move[1];
+            final int tR = move[2];
+            final int tC = move[3];
+
+            new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
+                if (!isFinishing()) {
+                    selectedRow = fR;
+                    selectedCol = fC;
+                    executeMove(tR, tC); // Bypasses the click listener guards!
+                }
+            }, 1000);
+        }
     }
 
     private void renderBoard() {
@@ -326,9 +427,15 @@ public class GameActivity extends AppCompatActivity {
 
     // Phase 2: Handle Click Logic
     private void handleSquareClick(int row, int col) {
+        // 1. Guard: If it's the computer's turn, don't let human touch the board
+        if (isVsComputerMode && !isWhiteTurn) {
+            return;
+        }
+
         if (selectedRow == -1) {
             Piece clicked = boardState[row][col];
             if (clicked != null && clicked.isWhite == isWhiteTurn) {
+                // REMOVED: The makeComputerMove() call here was causing the crash
                 selectedRow = row;
                 selectedCol = col;
                 renderBoard();
@@ -340,7 +447,7 @@ public class GameActivity extends AppCompatActivity {
                     Piece movingPiece = boardState[selectedRow][selectedCol];
                     Piece targetPiece = boardState[row][col];
 
-                    // 1. Move/Capture Sound Toggle
+                    // Sound Logic
                     boolean soundEnabled = getSharedPreferences("ChessPrefs", MODE_PRIVATE).getBoolean("sound", true);
                     if (soundEnabled) {
                         if (targetPiece != null || (movingPiece.type == Piece.Type.PAWN && row == enPassantTargetRow && col == enPassantTargetCol)) {
@@ -350,7 +457,7 @@ public class GameActivity extends AppCompatActivity {
                         }
                     }
 
-                    // En Passant Execution
+                    // En Passant Logic
                     if (movingPiece.type == Piece.Type.PAWN && row == enPassantTargetRow && col == enPassantTargetCol) {
                         int capturedPawnRow = isWhiteTurn ? row + 1 : row - 1;
                         boardState[capturedPawnRow][col] = null;
@@ -363,7 +470,7 @@ public class GameActivity extends AppCompatActivity {
                         halfMoveClock++;
                     }
 
-                    // Castling
+                    // Castling Logic
                     if (movingPiece.type == Piece.Type.KING && Math.abs(col - selectedCol) == 2) {
                         int rookStartCol = (col > selectedCol) ? 7 : 0;
                         int rookEndCol = (col > selectedCol) ? 5 : 3;
@@ -372,17 +479,7 @@ public class GameActivity extends AppCompatActivity {
                         if (boardState[row][rookEndCol] != null) boardState[row][rookEndCol].hasMoved = true;
                     }
 
-                    // En Passant Target Update
-                    int nextEnPassantRow = -1;
-                    int nextEnPassantCol = -1;
-                    if (movingPiece.type == Piece.Type.PAWN && Math.abs(row - selectedRow) == 2) {
-                        nextEnPassantRow = (selectedRow + row) / 2;
-                        nextEnPassantCol = col;
-                    }
-                    enPassantTargetRow = nextEnPassantRow;
-                    enPassantTargetCol = nextEnPassantCol;
-
-                    // Finalize Move
+                    // Finalize Move on Board
                     movingPiece.hasMoved = true;
                     boardState[row][col] = movingPiece;
                     boardState[selectedRow][selectedCol] = null;
@@ -397,13 +494,20 @@ public class GameActivity extends AppCompatActivity {
                         tvMoveLog.append(finalNotation + "  ");
                         moveCount++;
                     }
-                    moveHistoryScroll.post(() -> moveHistoryScroll.fullScroll(View.FOCUS_DOWN));
 
                     checkPawnPromotion(row, col);
+
+                    // --- THE TURN SWAP ---
                     isWhiteTurn = !isWhiteTurn;
+
+                    // Update selection state BEFORE checking for computer move
+                    selectedRow = -1;
+                    selectedCol = -1;
+
+                    renderBoard();
                     rotateBoard();
 
-                    // 2. Check/Checkmate Sound Toggle
+                    // Check for Checkmate/Stalemate
                     boolean canMove = hasLegalMoves(isWhiteTurn);
                     boolean inCheck = isInCheck(isWhiteTurn);
                     boolean soundEnabledFinal = getSharedPreferences("ChessPrefs", MODE_PRIVATE).getBoolean("sound", true);
@@ -415,17 +519,22 @@ public class GameActivity extends AppCompatActivity {
                         } else {
                             showGameOverDialog("Draw: Stalemate!");
                         }
-                    } else if (inCheck) {
-                        if (soundEnabledFinal) soundManager.playCheck();
-                    } else if (halfMoveClock >= 100) {
-                        showGameOverDialog("Draw: 50-Move Rule!");
+                    } else {
+                        if (inCheck && soundEnabledFinal) soundManager.playCheck();
+
+                        // --- TRIGGER COMPUTER HERE ---
+                        // Only if it's currently Black's turn and mode is active
+                        if (isVsComputerMode && !isWhiteTurn) {
+                            makeComputerMove();
+                        }
                     }
+                    return; // Exit to avoid the double reset at the bottom
                 } else {
-                    // This else now correctly matches "isMoveSafe"
-                    Toast.makeText(this, "Illegal Move: King would be in Check!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Illegal Move: King in Check!", Toast.LENGTH_SHORT).show();
                 }
             }
-            // This resets selection regardless of move success
+
+            // Reset selection for failed moves
             selectedRow = -1;
             selectedCol = -1;
             renderBoard();
@@ -575,11 +684,20 @@ public class GameActivity extends AppCompatActivity {
 
         // Phase 2: Board Flip Animation
         private void rotateBoard() {
-            // 1. Read the new key from Settings
+            // 1. NEW: Check if we are in Computer Mode. If so, stay at 0 degrees.
+            if (isVsComputerMode) {
+                chessBoardGrid.setRotation(0f);
+                for (int i = 0; i < chessBoardGrid.getChildCount(); i++) {
+                    chessBoardGrid.getChildAt(i).setRotation(0f);
+                }
+                return; // Exit early so no rotation happens
+            }
+
+            // 2. Read the rotate setting for Multiplayer (Friend mode)
             boolean shouldRotate = getSharedPreferences("ChessPrefs", MODE_PRIVATE)
                     .getBoolean("rotate_enabled", true);
 
-            // 2. If disabled, force the board back to 0 degrees and stop
+            // 3. If rotation is disabled in settings, force 0 degrees
             if (!shouldRotate) {
                 chessBoardGrid.setRotation(0f);
                 for (int i = 0; i < chessBoardGrid.getChildCount(); i++) {
@@ -588,7 +706,7 @@ public class GameActivity extends AppCompatActivity {
                 return;
             }
 
-            // 3. If enabled, run the animation
+            // 4. Run the 180-degree animation for Multiplayer mode
             float angle = isWhiteTurn ? 0f : 180f;
             chessBoardGrid.animate().rotation(angle).setDuration(600).start();
             for (int i = 0; i < chessBoardGrid.getChildCount(); i++) {
