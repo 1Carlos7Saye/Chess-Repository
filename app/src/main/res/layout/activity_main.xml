@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -9,7 +10,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome to your\nLocal Multiplayer Chess App"
+        android:text="Welcome to your  \n Multiplayer Chess App"
         android:textSize="26sp"
         android:textStyle="bold"
         android:textColor="@color/square_dark"
@@ -21,16 +22,20 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:text="Play vs Computer"
-        android:backgroundTint="@color/chess_primary"
-        android:layout_marginTop="10dp" />
+        android:textColor="#FFFFFF"
+        app:backgroundTint="@color/chess_primary"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="16dp"
+        android:textSize="18sp"
+        />
 
     <Button
         android:id="@+id/btnPlay"
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:text="Play vs a Friend"
-        android:backgroundTint="@color/chess_primary"
-        android:textColor="@android:color/white"
+        android:textColor="#FFFFFF"
+        app:backgroundTint="@color/chess_primary"
         android:layout_marginBottom="16dp"
         android:textSize="18sp" />
 
@@ -39,8 +44,8 @@
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:text="Settings"
-        android:backgroundTint="@color/chess_primary"
-        android:textColor="@android:color/white"
+        android:textColor="#FFFFFF"
+        app:backgroundTint="@color/chess_primary"
         android:textSize="18sp" />
 
 </LinearLayout>

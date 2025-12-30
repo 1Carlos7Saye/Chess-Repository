@@ -15,6 +15,7 @@ import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class GameActivity extends AppCompatActivity {
@@ -38,20 +39,32 @@ public class GameActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Add this BEFORE setContentView
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
         tvMoveLog = findViewById(R.id.tvMoveLog);
         moveHistoryScroll = findViewById(R.id.moveHistoryScroll);
-
-        // 1. Get the data sent from the menu
-        isVsComputerMode = getIntent().getBooleanExtra("isVsComputer", false);
-
-        soundManager = new SoundManager(this);
         chessBoardGrid = findViewById(R.id.chessBoardGrid);
         Button btnBack = findViewById(R.id.btnBackToMenu);
 
+
+
+        soundManager = new SoundManager(this);
+
+
+        // 1. Get the data sent from the menu
+        isVsComputerMode = getIntent().getBooleanExtra("isVsComputer", false);
+        Button btnDraw = findViewById(R.id.btnOfferDraw);
+        if (isVsComputerMode) {
+            btnDraw.setVisibility(View.GONE);
+        } else {
+            btnDraw.setOnClickListener(v -> showOpponentDrawDialog());
+        }
+
         btnBack.setOnClickListener(v -> showBackDialog());
+
 
         // 2. Start the game logic
         setupInitialPieces();
@@ -181,8 +194,27 @@ public class GameActivity extends AppCompatActivity {
                 .setMessage(message)
                 .setCancelable(false)
                 .setPositiveButton("Play Again", (dialog, which) -> {
+                    // 1. COMPLETELY WIPE the board array first
+                    for (int r = 0; r < 8; r++) {
+                        for (int c = 0; c < 8; c++) {
+                            boardState[r][c] = null;
+                        }
+                    }
+
+                    // 2. Reset Move History & Counters
+                    moveCount = 1;
+                    halfMoveClock = 0;
+                    enPassantTargetRow = -1;
+                    enPassantTargetCol = -1;
+                    tvMoveLog.setText("Moves: "); // Clear the visual log
+
+                    // 3. Re-initialize and Redraw
                     setupInitialPieces();
                     isWhiteTurn = true;
+
+                    // 4. Ensure rotation is reset to 0 for the start
+                    chessBoardGrid.setRotation(0f);
+
                     renderBoard();
                 })
                 .setNegativeButton("Main Menu", (dialog, which) -> finish())
@@ -191,6 +223,19 @@ public class GameActivity extends AppCompatActivity {
     private void executeMove(int row, int col) {
         Piece movingPiece = boardState[selectedRow][selectedCol];
         Piece targetPiece = boardState[row][col];
+
+        // --- ADD THIS LOGIC FOR EN PASSANT TARGETING ---
+        // First, reset the target for the current turn
+        int oldEnPassantRow = enPassantTargetRow;
+        int oldEnPassantCol = enPassantTargetCol;
+        enPassantTargetRow = -1;
+        enPassantTargetCol = -1;
+
+        // If a pawn moves 2 squares, set the new En Passant target
+        if (movingPiece.type == Piece.Type.PAWN && Math.abs(row - selectedRow) == 2) {
+            enPassantTargetRow = (selectedRow + row) / 2; // The square the pawn "skipped"
+            enPassantTargetCol = col;
+        }
 
         // 1. Move/Capture Sound
         boolean soundEnabled = getSharedPreferences("ChessPrefs", MODE_PRIVATE).getBoolean("sound", true);
@@ -202,10 +247,9 @@ public class GameActivity extends AppCompatActivity {
             }
         }
 
-        // 2. Specialized Rules (En Passant)
-        if (movingPiece.type == Piece.Type.PAWN && row == enPassantTargetRow && col == enPassantTargetCol) {
+        if (movingPiece.type == Piece.Type.PAWN && row == oldEnPassantRow && col == oldEnPassantCol) {
             int capturedPawnRow = isWhiteTurn ? row + 1 : row - 1;
-            boardState[capturedPawnRow][col] = null;
+            boardState[capturedPawnRow][col] = null; // Remove the pawn that was jumped over
         }
 
         // 3. Update Move History Logic
@@ -239,6 +283,33 @@ public class GameActivity extends AppCompatActivity {
         } else if (isVsComputerMode && !isWhiteTurn) {
             makeComputerMove();
         }
+        moveHistoryScroll.post(() -> moveHistoryScroll.fullScroll(View.FOCUS_DOWN));
+    }
+    private void showOpponentDrawDialog() {
+        // Step 1: Opponent sees the offer
+        new AlertDialog.Builder(this)
+                .setTitle("Draw Offered")
+                .setMessage("Your opponent has offered a draw. Do you accept?")
+                .setCancelable(false)
+                .setPositiveButton("Accept", (dialog, which) -> showConfirmDrawDialog())
+                .setNegativeButton("Decline", (dialog, which) -> {
+                    Toast.makeText(this, "Draw offer declined. Continue game.", Toast.LENGTH_SHORT).show();
+                })
+                .show();
+    }
+
+    private void showConfirmDrawDialog() {
+        // Step 2: Final confirmation
+        new AlertDialog.Builder(this)
+                .setTitle("Confirm Draw")
+                .setMessage("Are you sure you want to draw?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    showGameOverDialog("Game end as a result of draw");
+                })
+                .setNegativeButton("No", (dialog, which) -> {
+                    Toast.makeText(this, "Returning to board. Continue game.", Toast.LENGTH_SHORT).show();
+                })
+                .show();
     }
     private void makeComputerMove() {
         java.util.List<int[]> legalMoves = new java.util.ArrayList<>();
@@ -483,6 +554,21 @@ public class GameActivity extends AppCompatActivity {
                     movingPiece.hasMoved = true;
                     boardState[row][col] = movingPiece;
                     boardState[selectedRow][selectedCol] = null;
+
+                    // --- ADD THE EN PASSANT TARGET SETTING HERE ---
+// We must check if this move creates an En Passant opportunity for the NEXT player
+                    int nextEnPassantRow = -1;
+                    int nextEnPassantCol = -1;
+
+                    if (movingPiece.type == Piece.Type.PAWN && Math.abs(row - selectedRow) == 2) {
+                        // Calculate the "skipped" square based on which direction the pawn moved
+                        nextEnPassantRow = (selectedRow + row) / 2;
+                        nextEnPassantCol = col;
+                    }
+
+// Update the global variables so isValidMove() can see them on the next click
+                    enPassantTargetRow = nextEnPassantRow;
+                    enPassantTargetCol = nextEnPassantCol;
 
                     // Move History Logging
                     boolean isCapture = (targetPiece != null) || (movingPiece.type == Piece.Type.PAWN && row == enPassantTargetRow && col == enPassantTargetCol);
