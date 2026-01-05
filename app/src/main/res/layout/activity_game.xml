@@ -3,28 +3,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/chess_background">
+    android:background="@color/bg_dark">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:padding="12dp">
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnBackToMenu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Back to Menu"
+            android:layout_width="120dp"
+            android:layout_height="48dp"
+            android:text="MENU"
             android:textColor="#FFFFFF"
-            app:backgroundTint="@color/chess_primary" />
+            android:textStyle="bold"
+            android:background="@drawable/chess_button_secondary" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnOfferDraw"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Offer Draw"
+            android:layout_width="120dp"
+            android:layout_height="48dp"
+            android:text="DRAW"
             android:textColor="#FFFFFF"
-            app:backgroundTint="@color/chess_primary"
+            android:textStyle="bold"
+            android:background="@drawable/chess_button_secondary"
             android:layout_alignParentEnd="true" />
     </RelativeLayout>
 
@@ -32,8 +34,10 @@
         android:id="@+id/boardContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1.2"
-        android:layout_gravity="center">
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:padding="4dp"
+        android:background="@color/bg_surface">
 
         <GridLayout
             android:id="@+id/chessBoardGrid"
@@ -42,7 +46,7 @@
             android:columnCount="8"
             android:rowCount="8"
             android:layout_gravity="center"
-            android:padding="5dp" />
+            android:padding="2dp" />
     </FrameLayout>
 
     <LinearLayout
@@ -50,36 +54,45 @@
         android:layout_height="0dp"
         android:layout_weight="0.4"
         android:orientation="vertical"
-        android:padding="12dp"
-        android:background="#22000000">
+        android:padding="16dp"
+        android:background="@color/bg_surface">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Move History"
+            android:text="MOVE HISTORY"
             android:textStyle="bold"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp"
-            android:layout_marginBottom="4dp"/>
+            android:textColor="@color/square_light"
+            android:textSize="12sp"
+            android:letterSpacing="0.1"
+            android:layout_marginBottom="8dp"/>
 
-        <ScrollView
-            android:id="@+id/moveHistoryScroll"
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.4"
-            android:background="#2B2B2B"
-            android:padding="12dp">
+            android:layout_height="match_parent"
+            app:cardBackgroundColor="#211F1C"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#3D3A36">
 
-            <TextView
-                android:id="@+id/tvMoveLog"
+            <ScrollView
+                android:id="@+id/moveHistoryScroll"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Moves: "
-                android:textColor="#E0E0E0"
-                android:textSize="16sp"
-                android:fontFamily="sans-serif-medium"
-                android:lineSpacingExtra="6dp" />
-        </ScrollView>
+                android:layout_height="match_parent"
+                android:padding="8dp">
+
+                <TextView
+                    android:id="@+id/tvMoveLog"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Moves : "
+                    android:textColor="#E0E0E0"
+                    android:textSize="15sp"
+                    android:fontFamily="monospace"
+                    android:lineSpacingExtra="4dp" />
+            </ScrollView>
+        </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 
 </LinearLayout>

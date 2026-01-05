@@ -1,12 +1,10 @@
 package com.marwadi.finalprojectchess;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.widget.TextView;
 import android.widget.ScrollView;
 import android.widget.Toast;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -87,7 +85,7 @@ public class GameActivity extends AppCompatActivity {
     private void showBackDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Exit Game")
-                .setMessage("Are you sure you want to go back to menus?")
+                .setMessage("Are you sure you want to go back to menu ?")
                 .setPositiveButton("Yes", (dialog, which) -> finish())
                 .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
                 .show();
@@ -469,7 +467,7 @@ public class GameActivity extends AppCompatActivity {
         pieceImg.setImageResource(piece.resId);
 
         // Applying the Ivory/Charcoal tints from your colors.xml
-        int tint = piece.isWhite ? R.color.piece_white_ivory : R.color.piece_black_charcoal;
+        int tint = piece.isWhite ? R.color.square_light : R.color.piece_black;
         pieceImg.setColorFilter(getResources().getColor(tint));
 
         FrameLayout.LayoutParams pParams = new FrameLayout.LayoutParams(squareSize - 16, squareSize - 16);

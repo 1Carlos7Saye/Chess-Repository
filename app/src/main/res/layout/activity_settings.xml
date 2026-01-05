@@ -1,148 +1,166 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="20dp"
-    android:background="@color/chess_background">
+    android:background="@color/bg_dark">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Settings"
-        android:textSize="30sp"
-        android:textColor="@color/square_dark"
-        android:layout_gravity="center"
-        android:layout_marginBottom="30dp" />
-
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/swRotate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Rotate Board (1v1 Mode)"
-        android:padding="15dp"
-        android:textColor="@color/square_dark"
-        app:thumbTint="@color/chess_primary"
-        app:trackTint="@color/square_light" />
-
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/swSound"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Enable Move Sounds"
-        android:padding="15dp"
-        android:textColor="@color/square_dark"
-        app:thumbTint="@color/chess_primary"
-        app:trackTint="@color/square_light" />
-
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/swHelper"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Beginner Helper (Show Moves)"
-        android:padding="15dp"
-        android:textColor="@color/square_dark"
-        app:thumbTint="@color/chess_primary"
-        app:trackTint="@color/square_light" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Choose Board Theme"
-        android:textColor="@color/square_dark"
-        android:textSize="18sp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="10dp" />
-
-    <GridLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:columnCount="2">
-
-        <Button
-            android:id="@+id/themeBrown"
-            android:layout_columnWeight="1"
-            android:text="Classic Brown"
-            android:textColor="#FFFFFF"
-            app:backgroundTint="@color/chess_primary"
-            android:layout_margin="4dp" />
-
-        <Button
-            android:id="@+id/themeGreen"
-            android:layout_columnWeight="1"
-            android:text="Forest Green"
-            android:textColor="#FFFFFF"
-            app:backgroundTint="@color/chess_primary"
-            android:layout_margin="4dp" />
-
-        <Button
-            android:id="@+id/themeBlue"
-            android:layout_columnWeight="1"
-            android:text="Ocean Blue"
-            android:textColor="#FFFFFF"
-            app:backgroundTint="@color/chess_primary"
-            android:layout_margin="4dp" />
-
-        <Button
-            android:id="@+id/themePink"
-            android:layout_columnWeight="1"
-            android:text="Soft Pink"
-            android:textColor="#FFFFFF"
-            app:backgroundTint="@color/chess_primary"
-            android:layout_margin="4dp" />
-    </GridLayout>
-
-    <Button
-        android:id="@+id/btnBackToMenu"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:text="Back to Menu"
-        android:textColor="#FFFFFF"
-        app:backgroundTint="@color/chess_primary"
-        android:layout_marginTop="40dp" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp"
-        android:layout_marginTop="40dp"
-        android:gravity="center"
-        android:background="#F1F1D8"> <View
-        android:layout_width="100dp"
-        android:layout_height="2dp"
-        android:background="#F1F1D8" android:layout_marginBottom="16dp"/>
+        android:padding="24dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Chess for All"
-            android:textColor="#B58863" android:textStyle="bold"
-            android:textAllCaps="true"
-            android:letterSpacing="0.1"
-            android:textSize="25sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Version 1.0"
-            android:textColor="#B58863" android:textSize="18sp"
-            android:layout_marginTop="4dp" />
-
-        <TextView
-            android:id="@+id/tvDeveloperCredit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Developed by: Prince N. Saye Jr and Nyasha Perkins Mbanje"
-            android:textColor="#B58863" android:textSize="20sp"
+            android:text="SETTINGS"
+            android:textSize="28sp"
             android:textStyle="bold"
-            android:layout_marginTop="12dp" />
+            android:textColor="#FFFFFF"
+            android:layout_gravity="center"
+            android:letterSpacing="0.1"
+            android:layout_marginBottom="30dp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/bg_surface"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#3D3A36">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swRotate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Rotate Board (1v1 Mode)"
+                    android:padding="16dp"
+                    android:textColor="#FFFFFF"
+                    app:thumbTint="@color/chess_red"
+                    app:trackTint="#4D4944" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swSound"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Enable Move Sounds"
+                    android:padding="16dp"
+                    android:textColor="#FFFFFF"
+                    app:thumbTint="@color/chess_red"
+                    app:trackTint="#4D4944" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swHelper"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Beginner Helper"
+                    android:padding="16dp"
+                    android:textColor="#FFFFFF"
+                    app:thumbTint="@color/chess_red"
+                    app:trackTint="#4D4944" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Final Project - December 2025"
-            android:textColor="#B58863" android:textSize="20sp"
-            android:layout_marginTop="8dp" />
+            android:text="CHOOSE THEME"
+            android:textColor="#8B8987"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="12dp" />
 
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/themeBrown"
+                android:layout_columnWeight="1"
+                android:layout_margin="4dp"
+                android:text="Classic Brown"
+                android:background="@drawable/chess_button_secondary"
+                android:textColor="#FFFFFF" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/themePink"
+                android:layout_columnWeight="1"
+                android:layout_margin="4dp"
+                android:text="Soft Pink"
+                android:background="@drawable/chess_button_secondary"
+                android:textColor="#FFFFFF" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/themeBlue"
+                android:layout_columnWeight="1"
+                android:layout_margin="4dp"
+                android:text="Ocean Blue"
+                android:background="@drawable/chess_button_secondary"
+                android:textColor="#FFFFFF" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/themeGreen"
+                android:layout_columnWeight="1"
+                android:layout_margin="4dp"
+                android:text="Forest Green"
+                android:background="@drawable/chess_button_secondary"
+                android:textColor="#FFFFFF" />
+        </GridLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnBackToMenu"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="BACK TO MENU"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:background="@drawable/chess_button_red"
+            android:layout_marginTop="32dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:layout_marginTop="40dp"
+            android:gravity="center"
+            android:background="@color/bg_surface">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CHESS FOR ALL"
+                android:textColor="@color/chess_red"
+                android:textStyle="bold"
+                android:letterSpacing="0.1"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tvDeveloperCredit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Developed by: Prince N. Saye Jr \n &amp; Nyasha Perkins Mbanje"
+                android:textColor="#8B8987"
+                android:textSize="14sp"
+                android:textAlignment="center"
+                android:layout_marginTop="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Final Project - 2026"
+                android:textColor="#5E5C59"
+                android:textSize="11sp"
+                android:layout_marginTop="16dp" />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</ScrollView>
