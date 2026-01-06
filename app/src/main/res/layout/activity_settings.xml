@@ -157,6 +157,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Project Guide: Prof. Hardik Chavda \n &amp; Prof. Tejas Chauhan"
+                android:textColor="#8B8987"
+                android:textSize="14sp"
+                android:textAlignment="center"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="Final Project - 2026"
                 android:textColor="#5E5C59"
                 android:textSize="11sp"
