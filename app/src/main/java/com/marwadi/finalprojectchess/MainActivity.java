@@ -1,8 +1,11 @@
 package com.marwadi.finalprojectchess;// Make sure this matches your project package name
 
+<<<<<<< HEAD
 import android.widget.TextView;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+=======
+>>>>>>> nyasha-version
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -17,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+<<<<<<< HEAD
         // 1. Load the Slide Animation for each button
 // We create separate animation objects so they can have different start times
         Animation slide1 = AnimationUtils.loadAnimation(this, R.anim.slide_in);
@@ -42,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
         // 3. Start the animation
         mainTitle.startAnimation(pulse);
 
+=======
+>>>>>>> nyasha-version
         // 1. Link all three buttons
         Button btnPlay = findViewById(R.id.btnPlay);
         Button btnVsComputer = findViewById(R.id.btnVsComputer); // New button ID
