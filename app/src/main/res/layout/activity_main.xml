@@ -1,20 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="@color/bg_dark"
+    android:background="@drawable/wood_light"
     android:padding="32dp">
 
+    <ImageView
+        android:id="@+id/ivLogo"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/chess_app"
+        android:layout_marginBottom="16dp"
+        android:scaleType="fitCenter"
+        android:contentDescription="Crown Chess Logo" />
+
     <TextView
+        android:id="@+id/tvMainTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="CHESS FOR ALL"
+        android:text="CHESS"
         android:textSize="32sp"
         android:textStyle="bold"
-        android:fontFamily="sans-serif-black"
-        android:textColor="#FFFFFF"
+        android:textColor="#262421"
         android:textAlignment="center"
         android:letterSpacing="0.05"
         android:layout_marginBottom="60dp" />
@@ -22,41 +32,41 @@
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnVsComputer"
         android:layout_width="match_parent"
-        android:layout_height="68dp"
+        android:layout_height="74dp"
         android:text="PLAY COMPUTER"
         android:textSize="20sp"
         android:textStyle="bold"
         android:textColor="#FFFFFF"
-        android:background="@drawable/chess_button_red"
-        android:layout_marginBottom="20dp"
-        android:elevation="0dp"
+        android:background="@drawable/transparent_button_click"
+        android:layout_marginBottom="50dp"
         android:stateListAnimator="@null" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnPlay"
         android:layout_width="match_parent"
-        android:layout_height="68dp"
+        android:layout_height="74dp"
         android:text="PLAY FRIEND"
         android:textSize="20sp"
         android:textStyle="bold"
         android:textColor="#FFFFFF"
-        android:background="@drawable/chess_button_red"
-        android:layout_marginBottom="20dp"
-        android:elevation="0dp"
+        android:background="@drawable/transparent_button_click"
+        android:layout_marginBottom="50dp"
         android:stateListAnimator="@null" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnSettings"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="64dp"
         android:text="SETTINGS"
         android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="#FFFFFF"
-        android:background="@drawable/chess_button_secondary"
-        android:elevation="0dp"
+        android:background="@drawable/transparent_button_click"
         android:stateListAnimator="@null" />
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -64,18 +74,14 @@
         android:orientation="horizontal"
         android:layout_gravity="center_horizontal"
         android:gravity="center_vertical"
-        android:layout_marginTop="100dp"
         android:layout_marginBottom="10dp">
 
         <ImageView
             android:id="@+id/mu_shield_main"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
             android:src="@drawable/mu_official_logo"
             android:adjustViewBounds="true" />
-
-
-
     </LinearLayout>
 
 </LinearLayout>

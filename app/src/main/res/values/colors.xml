@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="bg_dark">#262421</color>
-    <color name="bg_surface">#312E2B</color>
-    <color name="piece_black">#121212</color>
+    <color name="bg_dark">#000000</color> <color name="bg_surface">#121212</color> <color name="piece_black">#000000</color>
 
-    <color name="chess_red">#A33333</color>
-    <color name="chess_red_shadow">#7A2626</color>
+    <color name="chess_red">#121212</color> <color name="chess_red_shadow">#000000</color>
 
     <color name="square_light">#EBECD0</color>
-    <color name="square_dark">#A33333</color>
-</resources>
+
+    <color name="square_dark">#769656</color> </resources>

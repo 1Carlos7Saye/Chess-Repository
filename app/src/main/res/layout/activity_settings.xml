@@ -1,8 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_dark">
+    android:background="@drawable/wood_light">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,115 +17,147 @@
             android:text="SETTINGS"
             android:textSize="28sp"
             android:textStyle="bold"
-            android:textColor="#FFFFFF"
+            android:textColor="#2D1B0E"
             android:layout_gravity="center"
             android:letterSpacing="0.1"
             android:layout_marginBottom="30dp" />
 
-        <com.google.android.material.card.MaterialCardView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/bg_surface"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="0dp"
-            app:strokeWidth="1dp"
-            app:strokeColor="#3D3A36">
+            android:orientation="vertical">
 
-            <LinearLayout
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/swRotate"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="8dp">
+                android:layout_height="74dp"
+                android:text="Rotate Board (1v1 Mode)"
+                android:padding="16dp"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:background="@drawable/transparent_button_style"
+                android:backgroundTint="#212121"
+                android:layout_marginBottom="12dp"
+                app:thumbTint="#FFFFFF"
+                app:trackTint="#424242" />
 
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/swRotate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Rotate Board (1v1 Mode)"
-                    android:padding="16dp"
-                    android:textColor="#FFFFFF"
-                    app:thumbTint="@color/chess_red"
-                    app:trackTint="#4D4944" />
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/swSound"
+                android:layout_width="match_parent"
+                android:layout_height="74dp"
+                android:text="Enable Move Sounds"
+                android:padding="16dp"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:background="@drawable/transparent_button_style"
+                android:backgroundTint="#212121"
+                android:layout_marginBottom="12dp"
+                app:thumbTint="#FFFFFF"
+                app:trackTint="#424242" />
 
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/swSound"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Enable Move Sounds"
-                    android:padding="16dp"
-                    android:textColor="#FFFFFF"
-                    app:thumbTint="@color/chess_red"
-                    app:trackTint="#4D4944" />
-
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/swHelper"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Beginner Helper"
-                    android:padding="16dp"
-                    android:textColor="#FFFFFF"
-                    app:thumbTint="@color/chess_red"
-                    app:trackTint="#4D4944" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/swHelper"
+                android:layout_width="match_parent"
+                android:layout_height="74dp"
+                android:text="Beginner Helper"
+                android:padding="16dp"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:background="@drawable/transparent_button_style"
+                android:backgroundTint="#212121"
+                android:layout_marginBottom="12dp"
+                app:thumbTint="#FFFFFF"
+                app:trackTint="#424242" />
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="CHOOSE THEME"
-            android:textColor="#8B8987"
+            android:textColor="#FFFFFF"
             android:textSize="14sp"
             android:textStyle="bold"
             android:layout_marginTop="24dp"
-            android:layout_marginBottom="12dp" />
+            android:layout_marginBottom="12dp"
+            android:layout_gravity="center"
+            android:background="#99000000"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:letterSpacing="0.1" />
 
         <GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:columnCount="2">
+            android:columnCount="2"
+            android:useDefaultMargins="true">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/themeBrown"
                 android:layout_columnWeight="1"
+                android:layout_height="54dp"
                 android:layout_margin="4dp"
-                android:text="Classic Brown"
-                android:background="@drawable/chess_button_secondary"
-                android:textColor="#FFFFFF" />
+                android:text="Brown"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/transparent_button_click"
+                android:backgroundTint="#212121"
+                android:stateListAnimator="@null" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/themePink"
                 android:layout_columnWeight="1"
+                android:layout_height="54dp"
                 android:layout_margin="4dp"
-                android:text="Soft Pink"
-                android:background="@drawable/chess_button_secondary"
-                android:textColor="#FFFFFF" />
+                android:text="Pink"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/transparent_button_click"
+                android:backgroundTint="#212121"
+                android:stateListAnimator="@null" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/themeBlue"
                 android:layout_columnWeight="1"
+                android:layout_height="54dp"
                 android:layout_margin="4dp"
-                android:text="Ocean Blue"
-                android:background="@drawable/chess_button_secondary"
-                android:textColor="#FFFFFF" />
+                android:text="Blue"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/transparent_button_click"
+                android:backgroundTint="#212121"
+                android:stateListAnimator="@null" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/themeGreen"
                 android:layout_columnWeight="1"
+                android:layout_height="54dp"
                 android:layout_margin="4dp"
-                android:text="Forest Green"
-                android:background="@drawable/chess_button_secondary"
-                android:textColor="#FFFFFF" />
+                android:text="Green"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/transparent_button_click"
+                android:backgroundTint="#212121"
+                android:stateListAnimator="@null" />
         </GridLayout>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnBackToMenu"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="74dp"
             android:text="BACK TO MENU"
             android:textColor="#FFFFFF"
             android:textStyle="bold"
-            android:background="@drawable/chess_button_red"
-            android:layout_marginTop="32dp" />
+            android:textSize="18sp"
+            android:background="@drawable/transparent_button_click"
+            android:backgroundTint="#212121"
+            android:layout_marginTop="32dp"
+            android:stateListAnimator="@null" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -133,13 +166,27 @@
             android:padding="24dp"
             android:layout_marginTop="40dp"
             android:gravity="center"
-            android:background="@color/bg_surface">
+            android:background="#99000000">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ABOUT"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:layout_marginBottom="16dp"
+                android:letterSpacing="0.1" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="CHESS FOR ALL"
-                android:textColor="@color/chess_red"
+                android:textColor="#FFFFFF"
                 android:textStyle="bold"
                 android:letterSpacing="0.1"
                 android:textSize="18sp" />
@@ -149,7 +196,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Developed by: Prince N. Saye Jr \n &amp; Nyasha Perkins Mbanje"
-                android:textColor="#8B8987"
+                android:textColor="#E0E0E0"
                 android:textSize="14sp"
                 android:textAlignment="center"
                 android:layout_marginTop="12dp" />
@@ -158,7 +205,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Project Guide: Prof. Hardik Chavda \n &amp; Prof. Tejas Chauhan"
-                android:textColor="#8B8987"
+                android:textColor="#E0E0E0"
                 android:textSize="14sp"
                 android:textAlignment="center"
                 android:layout_marginTop="8dp" />
@@ -167,7 +214,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Final Project - 2026"
-                android:textColor="#5E5C59"
+                android:textColor="#BDBDBD"
                 android:textSize="11sp"
                 android:layout_marginTop="16dp" />
         </LinearLayout>

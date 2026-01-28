@@ -7,13 +7,13 @@
     android:layout_width="180dp"
     android:layout_height="180dp"
     android:layout_centerInParent="true"
-    android:src="@drawable/ic_launcher_foreground" /> <TextView
+    android:src="@drawable/chess_app" /> <TextView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_below="@id/splashLogo"
     android:layout_centerHorizontal="true"
     android:layout_marginTop="20dp"
-    android:text="CHESS FOR ALL"
+    android:text="Crown Chess"
     android:textColor="#FFFFFF"
     android:textSize="28sp"
     android:textStyle="bold"
